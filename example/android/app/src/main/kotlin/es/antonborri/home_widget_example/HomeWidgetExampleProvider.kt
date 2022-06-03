@@ -45,7 +45,7 @@ class HomeWidgetExampleProvider : HomeWidgetProvider() {
 //                setImageViewResource( R.id.imageView, srcId: null)
 //                val image = widgetData.getString("")
                 val image = widgetData.getString("image", null)
-                val img = widgetData.getString()
+//                val img = widgetData.getString()
                 setImageViewUri(R.id.imageView, Uri.parse(image) ?: null)
                 val imageIntent = HomeWidgetLaunchIntent.getActivity(
                     context,
