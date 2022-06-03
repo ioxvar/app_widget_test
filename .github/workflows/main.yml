@@ -1,0 +1,83 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - name: Get Packages
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Format
+        run: flutter format . --set-exit-if-changed
+      - name: Publishability
+        run: flutter pub publish --dry-run
+      - name: Test
+        run: flutter test --coverage
+      - uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  android:
+    name: Android Integration Tests
+    needs: quality
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Run Android Integration Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          working-directory: example
+          script: flutter test integration_test/android_test.dart -d emulator-5554
+
+  # iOS Test based on https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
+  # by @kate_sheremet
+  ios:
+    name: iOS Integration Tests
+    needs: quality
+    strategy:
+      matrix:
+        device:
+          - "iPhone 13"
+      fail-fast: false
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: stable
+      - uses: futureware-tech/simulator-action@v1
+        id: simulator
+        with:
+          model: ${{ matrix.device }}
+      - name: "Run iOS integration tests"
+        run: flutter test integration_test/ios_test.dart -d ${{steps.simulator.outputs.udid}}
+        working-directory: example
