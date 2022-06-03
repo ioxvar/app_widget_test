@@ -40,19 +40,19 @@ class HomeWidgetExampleProvider : HomeWidgetProvider() {
                         Uri.parse("homeWidgetExample://message?message=$message"))
                 setOnClickPendingIntent(R.id.widget_message, pendingIntentWithData)
 
+                // val img = widgetData.getString("img", "")
+                // setImageViewUri(R.id.imageView, Uri.parse(
+                //     "https://images.unsplash.com/photo-1554755229-ca4470e07232?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHZlbHZldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60")?: null)
+//                val imageGetter =
 
-//                val image = widgetData.
-//                setImageViewResource( R.id.imageView, srcId: null)
-//                val image = widgetData.getString("")
-                val image = widgetData.getString("image", null)
-//                val img = widgetData.getString()
-                setImageViewUri(R.id.imageView, Uri.parse(image) ?: null)
-                val imageIntent = HomeWidgetLaunchIntent.getActivity(
-                    context,
-                    MainActivity::class.java,
-//                    Uri.parse()
-                    )
-                setOnClickPendingIntent(R.id.imageView, imageIntent)
+
+//                val image = widgetData.getString("image", null)
+//                setImageViewUri(R.id.imageView, Uri.parse(image) ?: null)
+//                val imageIntent = HomeWidgetLaunchIntent.getActivity(
+//                    context,
+//                    MainActivity::class.java,
+//                    )
+//                setOnClickPendingIntent(R.id.imageView, imageIntent)
             }
 
             appWidgetManager.updateAppWidget(widgetId, views)
