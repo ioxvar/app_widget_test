@@ -92,10 +92,14 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _sendData() async {
     try {
-      return Future.wait([
-        HomeWidget.saveWidgetData<String>('title', _titleController.text),
-        HomeWidget.saveWidgetData<String>('message', _messageController.text),
-      ]);
+      return Future.wait(
+        [
+          HomeWidget.saveWidgetData<String>('title', _titleController.text),
+          HomeWidget.saveWidgetData<String>('message', _messageController.text),
+          HomeWidget.saveWidgetData<String>('image',
+              'https://images.unsplash.com/photo-1554755229-ca4470e07232?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHZlbHZldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60'),
+        ],
+      );
     } on PlatformException catch (exception) {
       debugPrint('Error Sending Data. $exception');
     }

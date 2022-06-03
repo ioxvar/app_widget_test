@@ -33,14 +33,26 @@ class HomeWidgetExampleProvider : HomeWidgetProvider() {
                 setTextViewText(R.id.widget_message, message
                         ?: "No Message Set")
 
-                // val image = widgetData
-                // setImageViewUri(R.id.widget_image, uri)
                 // Detect App opened via Click inside Flutter
                 val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
                         context,
                         MainActivity::class.java,
                         Uri.parse("homeWidgetExample://message?message=$message"))
                 setOnClickPendingIntent(R.id.widget_message, pendingIntentWithData)
+
+
+//                val image = widgetData.
+//                setImageViewResource( R.id.imageView, srcId: null)
+//                val image = widgetData.getString("")
+                val image = widgetData.getString("image", null)
+                val img = widgetData.getString()
+                setImageViewUri(R.id.imageView, Uri.parse(image) ?: null)
+                val imageIntent = HomeWidgetLaunchIntent.getActivity(
+                    context,
+                    MainActivity::class.java,
+//                    Uri.parse()
+                    )
+                setOnClickPendingIntent(R.id.imageView, imageIntent)
             }
 
             appWidgetManager.updateAppWidget(widgetId, views)
